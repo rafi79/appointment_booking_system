@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MediCare</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1a365d;
+            --accent-color: #48bb78;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-bg: #f8fafc;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar-custom {
+            background: var(--primary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar {
+            background: white;
+            min-height: calc(100vh - 76px);
+            box-shadow: var(--card-shadow);
+            border-radius: 0 15px 15px 0;
+        }
+        
+        .sidebar-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(44, 90, 160, 0.05);
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar-item.active {
+            background: rgba(44, 90, 160, 0.1);
+            border-left-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .content-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            border: none;
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 15px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .welcome-card {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+        
+        .table th {
+            background: var(--light-bg);
+            font-weight: 600;
+            border: none;
+            padding: 15px;
+        }
+        
+        .table td {
+            padding: 15px;
+            border: none;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-inactive { background: #fecaca; color: #991b1b; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-confirmed { background: #d1fae5; color: #065f46; }
+        .status-completed { background: #dbeafe; color: #1e40af; }
+        .status-cancelled { background: #fecaca; color: #991b1b; }
+        
+        .btn-action {
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-edit {
+            background: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #d97706;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-view {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-view:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .search-box {
+            background: white;
+            border-radius: 25px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+            outline: none;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 10px;
+            padding: 15px;
+            color: #c33;
+            margin: 10px 0;
+        }
+        
+        .success-message {
+            background: #efe;
+            border: 1px solid #cfc;
+            border-radius: 10px;
+            padding: 15px;
+            color: #363;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-heartbeat me-2"></i>MediCare Admin
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3">
+                    <i class="fas fa-user-shield me-2"></i>
+                    <span id="adminName">Administrator</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 px-0">
+                <div class="sidebar">
+                    <div class="sidebar-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt me-3"></i>Dashboard
+                    </div>
+                    <div class="sidebar-item" data-section="users">
+                        <i class="fas fa-users me-3"></i>Users
+                    </div>
+                    <div class="sidebar-item" data-section="doctors">
+                        <i class="fas fa-user-md me-3"></i>Doctors
+                    </div>
+                    <div class="sidebar-item" data-section="appointments">
+                        <i class="fas fa-calendar-alt me-3"></i>Appointments
+                    </div>
+                    <div class="sidebar-item" data-section="settings">
+                        <i class="fas fa-cog me-3"></i>Settings
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10">
+                <div class="p-4">
+                    <!-- Dashboard Section -->
+                    <div id="dashboard" class="content-section active">
+                        <div class="welcome-card">
+                            <h2><i class="fas fa-shield-alt me-3"></i>Admin Dashboard</h2>
+                            <p class="mb-0">Monitor and manage your healthcare appointment system with comprehensive administrative tools.</p>
+                        </div>
+                        
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-primary text-white">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="stat-number text-primary" id="totalUsers">0</div>
+                                    <div class="text-muted">Total Users</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-success text-white">
+                                        <i class="fas fa-user-md"></i>
+                                    </div>
+                                    <div class="stat-number text-success" id="totalDoctors">0</div>
+                                    <div class="text-muted">Active Doctors</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-warning text-white">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="stat-number text-warning" id="totalAppointments">0</div>
+                                    <div class="text-muted">Total Appointments</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="stat-card">
+                                    <div class="stat-icon bg-info text-white">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="stat-number text-info" id="totalRevenue">৳0</div>
+                                    <div class="text-muted">Total Revenue</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Users Section -->
+                    <div id="users" class="content-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                            <h3><i class="fas fa-users me-2"></i>User Management</h3>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <input type="text" class="form-control search-box" id="userSearch" placeholder="Search users..." style="width: 300px;">
+                                <select class="form-select" id="userTypeFilter" style="width: 150px;">
+                                    <option value="">All Types</option>
+                                    <option value="patient">Patients</option>
+                                    <option value="doctor">Doctors</option>
+                                    <option value="admin">Admins</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                            <th>Joined</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                        <tr><td colspan="6" class="text-center">Loading users...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctors Section -->
+                    <div id="doctors" class="content-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                            <h3><i class="fas fa-user-md me-2"></i>Doctor Management</h3>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <input type="text" class="form-control search-box" id="doctorSearch" placeholder="Search doctors..." style="width: 300px;">
+                                <select class="form-select" id="specializationFilter" style="width: 200px;">
+                                    <option value="">All Specializations</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Doctor</th>
+                                            <th>Specialization</th>
+                                            <th>Experience</th>
+                                            <th>Fee</th>
+                                            <th>Appointments</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="doctorsTableBody">
+                                        <tr><td colspan="7" class="text-center">Loading doctors...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointments Section -->
+                    <div id="appointments" class="content-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+                            <h3><i class="fas fa-calendar-alt me-2"></i>Appointment Management</h3>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <input type="text" class="form-control search-box" id="appointmentSearch" placeholder="Search appointments..." style="width: 300px;">
+                                <select class="form-select" id="statusFilter" style="width: 150px;">
+                                    <option value="">All Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>Doctor</th>
+                                            <th>Date & Time</th>
+                                            <th>Status</th>
+                                            <th>Notes</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="appointmentsTableBody">
+                                        <tr><td colspan="6" class="text-center">Loading appointments...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div id="settings" class="content-section">
+                        <h3><i class="fas fa-cog me-2"></i>System Settings</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body">
+                                        <h5><i class="fas fa-hospital me-2"></i>Hospital Information</h5>
+                                        <form id="hospitalSettingsForm">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Hospital Name</label>
+                                                    <input type="text" class="form-control" id="hospitalName" value="MediCare Hospital">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Contact Number</label>
+                                                    <input type="tel" class="form-control" id="hospitalPhone" value="+8801712345678">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Email</label>
+                                                    <input type="email" class="form-control" id="hospitalEmail" value="info@medicare.com">
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Website</label>
+                                                    <input type="url" class="form-control" id="hospitalWebsite" value="https://medicare.com">
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Address</label>
+                                                    <textarea class="form-control" id="hospitalAddress" rows="3">123 Medical Center, Dhaka, Bangladesh</textarea>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        
+                                        <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                                            <i class="fas fa-save me-2"></i>Save Settings
+                                        </button>
+                                        <div id="settingsMessage"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-header bg-white">
+                                        <h5 class="mb-0"><i class="fas fa-tools me-2"></i>System Tools</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-outline-primary" onclick="backupDatabase()">
+                                                <i class="fas fa-database me-2"></i>Backup Database
+                                            </button>
+                                            <button class="btn btn-outline-warning" onclick="clearCache()">
+                                                <i class="fas fa-broom me-2"></i>Clear Cache
+                                            </button>
+                                            <button class="btn btn-outline-info" onclick="exportUsers()">
+                                                <i class="fas fa-download me-2"></i>Export Users
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Details Modal -->
+    <div class="modal fade" id="userDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-user me-2"></i>User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetailsContent">
+                        <div class="loading">Loading user details...</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-warning" id="toggleUserStatus">
+                        <i class="fas fa-toggle-on me-2"></i>Toggle Status
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global state
+        const state = {
+            users: [],
+            doctors: [],
+            appointments: [],
+            dashboardData: {},
+            currentSection: 'dashboard'
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', init);
+
+        function init() {
+            if (!isAuthenticated()) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            setAdminName();
+            setupEventListeners();
+            loadSectionData('dashboard');
+        }
+
+        function isAuthenticated() {
+            const token = localStorage.getItem('token');
+            const userType = localStorage.getItem('user_type');
+            
+            if (!token || userType !== 'admin') {
+                return false;
+            }
+            
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                const currentTime = Date.now() / 1000;
+                
+                if (payload.exp && payload.exp < currentTime) {
+                    localStorage.clear();
+                    return false;
+                }
+            } catch (e) {
+                localStorage.clear();
+                return false;
+            }
+            
+            return true;
+        }
+
+        function setAdminName() {
+            const name = localStorage.getItem('user_name') || 'Administrator';
+            document.getElementById('adminName').textContent = name;
+        }
+
+        function setupEventListeners() {
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', handleSidebarClick);
+            });
+
+            // Search and filters
+            document.getElementById('userSearch')?.addEventListener('input', filterUsers);
+            document.getElementById('userTypeFilter')?.addEventListener('change', filterUsers);
+            document.getElementById('doctorSearch')?.addEventListener('input', filterDoctors);
+            document.getElementById('specializationFilter')?.addEventListener('change', filterDoctors);
+            document.getElementById('appointmentSearch')?.addEventListener('input', filterAppointments);
+            document.getElementById('statusFilter')?.addEventListener('change', filterAppointments);
+        }
+
+        function handleSidebarClick(e) {
+            const section = e.currentTarget.dataset.section;
+            
+            // Update active state
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            
+            // Show section
+            showSection(section);
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            state.currentSection = section;
+            loadSectionData(section);
+        }
+
+        // API Functions
+        async function apiCall(endpoint, options = {}) {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                ...options
+            };
+
+            try {
+                const response = await fetch(endpoint, config);
+                
+                if (response.status === 401) {
+                    localStorage.clear();
+                    window.location.href = '/login';
+                    return null;
+                }
+                
+                if (response.status === 404) {
+                    console.error('Endpoint not found:', endpoint);
+                    throw new Error(`Endpoint not found: ${endpoint}`);
+                }
+                
+                return response;
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+
+        // Section loading
+        async function loadSectionData(section) {
+            switch(section) {
+                case 'dashboard':
+                    await loadDashboard();
+                    break;
+                case 'users':
+                    await loadUsers();
+                    break;
+                case 'doctors':
+                    await loadDoctors();
+                    break;
+                case 'appointments':
+                    await loadAppointments();
+                    break;
+                case 'settings':
+                    loadSettings();
+                    break;
+            }
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            try {
+                const response = await apiCall('/api/v1/admin/dashboard');
+                if (response?.ok) {
+                    const data = await response.json();
+                    state.dashboardData = data;
+                    updateDashboardStats(data);
+                }
+            } catch (error) {
+                console.error('Dashboard error:', error);
+                showError('Failed to load dashboard data');
+            }
+        }
+
+        function updateDashboardStats(data) {
+            document.getElementById('totalUsers').textContent = data.users?.total || 0;
+            document.getElementById('totalDoctors').textContent = data.doctors?.active || 0;
+            document.getElementById('totalAppointments').textContent = data.appointments?.total || 0;
+            document.getElementById('totalRevenue').textContent = `৳${(data.revenue?.total || 0).toLocaleString()}`;
+        }
+
+        // Users Management
+        async function loadUsers() {
+            try {
+                const response = await apiCall('/api/v1/admin/users');
+                if (response?.ok) {
+                    state.users = await response.json();
+                    displayUsers();
+                }
+            } catch (error) {
+                document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Failed to load users</td></tr>';
+            }
+        }
+
+        function displayUsers(users = state.users) {
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No users found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <strong>${user.full_name}</strong><br>
+                        <small class="text-muted">${user.mobile_number || 'No mobile'}</small>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>
+                        <span class="badge bg-secondary">${user.user_type}</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${user.is_active ? 'active' : 'inactive'}">
+                            ${user.is_active ? 'Active' : 'Inactive'}
+                        </span>
+                    </td>
+                    <td>${formatDate(user.created_at)}</td>
+                    <td>
+                        <button class="btn btn-action btn-view" onclick="viewUser(${user.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-action btn-edit" onclick="editUser(${user.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-action btn-delete" onclick="deleteUser(${user.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const typeFilter = document.getElementById('userTypeFilter').value;
+
+            const filtered = state.users.filter(user => {
+                const matchesSearch = user.full_name.toLowerCase().includes(searchTerm) ||
+                                    user.email.toLowerCase().includes(searchTerm);
+                const matchesType = !typeFilter || user.user_type === typeFilter;
+                return matchesSearch && matchesType;
+            });
+
+            displayUsers(filtered);
+        }
+
+        // Doctors Management
+        async function loadDoctors() {
+            try {
+                const response = await apiCall('/api/v1/admin/doctors');
+                if (response?.ok) {
+                    state.doctors = await response.json();
+                    displayDoctors();
+                    await loadSpecializations();
+                }
+            } catch (error) {
+                document.getElementById('doctorsTableBody').innerHTML = '<tr><td colspan="7" class="text-center text-danger">Failed to load doctors</td></tr>';
+            }
+        }
+
+        function displayDoctors(doctors = state.doctors) {
+            const tbody = document.getElementById('doctorsTableBody');
+            
+            if (doctors.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No doctors found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = doctors.map(doctor => {
+                const user = doctor.user || {};
+                const doctorName = user.full_name || 'Dr. Undefined';
+                const isActive = user.is_active || false;
+                
+                return `
+                    <tr>
+                        <td>
+                            <strong>${doctorName}</strong><br>
+                            <small class="text-muted">${doctor.qualification || 'MBBS, DCH'}</small>
+                        </td>
+                        <td>${doctor.specialization || 'General Medicine'}</td>
+                        <td>${doctor.experience_years || 0} years</td>
+                        <td>৳${doctor.consultation_fee || 0}</td>
+                        <td>
+                            <span class="badge bg-primary">0</span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-${isActive ? 'active' : 'inactive'}">
+                                ${isActive ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-action btn-view" onclick="viewDoctor(${doctor.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-action btn-edit" onclick="editDoctor(${doctor.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-action btn-delete" onclick="deleteDoctor(${doctor.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function loadSpecializations() {
+            try {
+                const response = await apiCall('/api/v1/admin/specializations');
+                if (response?.ok) {
+                    const specializations = await response.json();
+                    const select = document.getElementById('specializationFilter');
+                    
+                    select.innerHTML = '<option value="">All Specializations</option>' +
+                        specializations.map(spec => `<option value="${spec.value}">${spec.label}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Failed to load specializations:', error);
+            }
+        }
+
+        function filterDoctors() {
+            const searchTerm = document.getElementById('doctorSearch').value.toLowerCase();
+            const specialization = document.getElementById('specializationFilter').value;
+
+            const filtered = state.doctors.filter(doctor => {
+                const user = doctor.user || {};
+                const doctorName = user.full_name || '';
+                const matchesSearch = doctorName.toLowerCase().includes(searchTerm) ||
+                                    (doctor.specialization || '').toLowerCase().includes(searchTerm);
+                const matchesSpecialization = !specialization || doctor.specialization === specialization;
+                return matchesSearch && matchesSpecialization;
+            });
+
+            displayDoctors(filtered);
+        }
+
+        // Appointments Management
+        async function loadAppointments() {
+            try {
+                const response = await apiCall('/api/v1/admin/appointments');
+                if (response?.ok) {
+                    state.appointments = await response.json();
+                    displayAppointments();
+                }
+            } catch (error) {
+                document.getElementById('appointmentsTableBody').innerHTML = '<tr><td colspan="6" class="text-center text-danger">Failed to load appointments</td></tr>';
+            }
+        }
+
+        function displayAppointments(appointments = state.appointments) {
+            const tbody = document.getElementById('appointmentsTableBody');
+            
+            if (appointments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No appointments found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = appointments.map(apt => `
+                <tr>
+                    <td>
+                        <strong>${apt.patient_name || 'Unknown Patient'}</strong><br>
+                        <small class="text-muted">${apt.patient_mobile || 'No contact'}</small>
+                    </td>
+                    <td>
+                        <strong>Dr. ${apt.doctor_name || 'Unknown'}</strong><br>
+                        <small class="text-muted">${apt.doctor_specialization || 'General'}</small>
+                    </td>
+                    <td>
+                        ${formatDate(apt.appointment_date)}<br>
+                        <small class="text-muted">${apt.appointment_time}</small>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${apt.status}">${apt.status}</span>
+                    </td>
+                    <td>
+                        <small>${apt.notes || apt.symptoms || 'No notes'}</small>
+                    </td>
+                    <td>
+                        <button class="btn btn-action btn-view" onclick="viewAppointment(${apt.id})">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-action btn-edit" onclick="editAppointment(${apt.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-action btn-delete" onclick="deleteAppointment(${apt.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterAppointments() {
+            const searchTerm = document.getElementById('appointmentSearch').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const filtered = state.appointments.filter(apt => {
+                const matchesSearch = (apt.patient_name || '').toLowerCase().includes(searchTerm) ||
+                                    (apt.doctor_name || '').toLowerCase().includes(searchTerm);
+                const matchesStatus = !statusFilter || apt.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+
+            displayAppointments(filtered);
+        }
+
+        // Modal Functions
+        async function viewUser(userId) {
+            try {
+                const response = await apiCall(`/api/v1/admin/users/${userId}`);
+                if (response?.ok) {
+                    const user = await response.json();
+                    displayUserDetails(user);
+                    new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+                }
+            } catch (error) {
+                showError('Failed to load user details');
+            }
+        }
+
+        function displayUserDetails(user) {
+            const content = document.getElementById('userDetailsContent');
+            content.innerHTML = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Name:</strong> ${user.full_name}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Mobile:</strong> ${user.mobile_number || 'N/A'}</p>
+                        <p><strong>Type:</strong> ${user.user_type}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Status:</strong> <span class="status-badge status-${user.is_active ? 'active' : 'inactive'}">${user.is_active ? 'Active' : 'Inactive'}</span></p>
+                        <p><strong>Verified:</strong> ${user.is_verified ? 'Yes' : 'No'}</p>
+                        <p><strong>Joined:</strong> ${formatDate(user.created_at)}</p>
+                        <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('toggleUserStatus').onclick = () => toggleUserStatus(user.id, user.is_active);
+        }
+
+        async function toggleUserStatus(userId, currentStatus) {
+            try {
+                const response = await apiCall(`/api/v1/admin/users/${userId}/toggle-status`, {
+                    method: 'PUT'
+                });
+                
+                if (response?.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        showSuccess('User status updated successfully');
+                        bootstrap.Modal.getInstance(document.getElementById('userDetailsModal')).hide();
+                        loadUsers();
+                    }
+                } else {
+                    const error = await response.json();
+                    showError('Failed to update user status: ' + (error.detail || 'Unknown error'));
+                }
+            } catch (error) {
+                showError('Failed to update user status');
+            }
+        }
+
+        // Settings
+        function loadSettings() {
+            // Settings are already populated with default values
+        }
+
+        async function saveSettings() {
+            try {
+                const settings = {
+                    hospital_name: document.getElementById('hospitalName').value,
+                    hospital_phone: document.getElementById('hospitalPhone').value,
+                    hospital_email: document.getElementById('hospitalEmail').value,
+                    hospital_website: document.getElementById('hospitalWebsite').value,
+                    hospital_address: document.getElementById('hospitalAddress').value
+                };
+
+                const response = await apiCall('/api/v1/admin/settings', {
+                    method: 'PUT',
+                    body: JSON.stringify(settings)
+                });
+
+                if (response?.ok) {
+                    showMessage('settingsMessage', 'Settings saved successfully!', 'success');
+                } else {
+                    showMessage('settingsMessage', 'Failed to save settings', 'error');
+                }
+            } catch (error) {
+                showMessage('settingsMessage', 'Error saving settings', 'error');
+            }
+        }
+
+        // System Tools
+        async function backupDatabase() {
+            try {
+                const response = await apiCall('/api/v1/admin/backup', { method: 'POST' });
+                if (response?.ok) {
+                    showSuccess('Database backup created successfully');
+                }
+            } catch (error) {
+                showError('Failed to create database backup');
+            }
+        }
+
+        async function clearCache() {
+            try {
+                const response = await apiCall('/api/v1/admin/clear-cache', { method: 'POST' });
+                if (response?.ok) {
+                    showSuccess('Cache cleared successfully');
+                }
+            } catch (error) {
+                showError('Failed to clear cache');
+            }
+        }
+
+        async function exportUsers() {
+            try {
+                const response = await apiCall('/api/v1/admin/export/users');
+                if (response?.ok) {
+                    const blob = await response.blob();
+                    downloadFile(blob, 'users-export.csv');
+                }
+            } catch (error) {
+                showError('Failed to export users');
+            }
+        }
+
+        function downloadFile(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showMessage(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            const className = type === 'error' ? 'error-message' : 'success-message';
+            container.innerHTML = `<div class="${className}">${message}</div>`;
+
+            if (type === 'success') {
+                setTimeout(() => container.innerHTML = '', 3000);
+            }
+        }
+
+        function showError(message) {
+            console.error(message);
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            console.log(message);
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-success alert-dismissible fade show position-fixed';
+            toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+            toast.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3000);
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/login';
+        }
+
+        // Additional utility functions for admin actions
+        function editUser(userId) {
+            console.log('Edit user:', userId);
+            showSuccess('Edit user feature coming soon');
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                console.log('Delete user:', userId);
+                showSuccess('Delete user feature coming soon');
+            }
+        }
+
+        function viewDoctor(doctorId) {
+            console.log('View doctor:', doctorId);
+            showSuccess('View doctor feature coming soon');
+        }
+
+        function editDoctor(doctorId) {
+            console.log('Edit doctor:', doctorId);
+            showSuccess('Edit doctor feature coming soon');
+        }
+
+        function deleteDoctor(doctorId) {
+            if (confirm('Are you sure you want to delete this doctor?')) {
+                console.log('Delete doctor:', doctorId);
+                showSuccess('Delete doctor feature coming soon');
+            }
+        }
+
+        function viewAppointment(appointmentId) {
+            console.log('View appointment:', appointmentId);
+            showSuccess('View appointment feature coming soon');
+        }
+
+        function editAppointment(appointmentId) {
+            console.log('Edit appointment:', appointmentId);
+            showSuccess('Edit appointment feature coming soon');
+        }
+
+        function deleteAppointment(appointmentId) {
+            if (confirm('Are you sure you want to delete this appointment?')) {
+                console.log('Delete appointment:', appointmentId);
+                showSuccess('Delete appointment feature coming soon');
+            }
+        }
+    </script>
+</body>
+</html>

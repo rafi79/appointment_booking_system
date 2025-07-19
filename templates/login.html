@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MediCare System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1a365d;
+            --accent-color: #48bb78;
+            --gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        body {
+            background: var(--gradient);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="rgba(255,255,255,0.05)"><polygon points="1000,100 1000,0 0,100"/></svg>');
+            background-size: cover;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--gradient);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .login-header h2 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+        
+        .login-header p {
+            color: #666;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .form-floating {
+            margin-bottom: 20px;
+        }
+        
+        .form-floating label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 20px 15px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+            background: white;
+        }
+        
+        .btn-login {
+            background: var(--gradient);
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(44, 90, 160, 0.4);
+            color: white;
+        }
+        
+        .btn-login:disabled {
+            opacity: 0.7;
+            transform: none;
+        }
+        
+        .demo-accounts {
+            background: linear-gradient(135deg, rgba(72, 187, 120, 0.1), rgba(72, 187, 120, 0.05));
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 35px;
+            border: 1px solid rgba(72, 187, 120, 0.2);
+        }
+        
+        .demo-account {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-account::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(72, 187, 120, 0.1), transparent);
+            transition: width 0.3s ease;
+        }
+        
+        .demo-account:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .demo-account:hover::before {
+            width: 100%;
+        }
+        
+        .demo-account:last-child {
+            margin-bottom: 0;
+        }
+        
+        .demo-account i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .demo-account .text-primary { color: var(--primary-color) !important; }
+        .demo-account .text-success { color: var(--accent-color) !important; }
+        .demo-account .text-info { color: #17a2b8 !important; }
+        
+        .back-link {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 10;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-link:hover {
+            color: white;
+            transform: translateX(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .alert {
+            border-radius: 15px;
+            border: none;
+            padding: 15px 20px;
+            margin-top: 20px;
+        }
+        
+        .loading-spinner {
+            display: none;
+            margin-right: 10px;
+        }
+        
+        .icon-circle {
+            width: 90px;
+            height: 90px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 25px rgba(44, 90, 160, 0.3);
+        }
+        
+        .icon-circle i {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .register-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .register-link a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .back-link {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: inline-block;
+                margin-bottom: 20px;
+            }
+            
+            .login-card {
+                padding: 30px 25px;
+                margin: 20px;
+            }
+            
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Background Shapes -->
+    <div class="floating-shapes">
+        <div class="shape">
+            <i class="fas fa-heartbeat" style="font-size: 3rem; color: white;"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-user-md" style="font-size: 2.5rem; color: white;"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-calendar-alt" style="font-size: 2rem; color: white;"></i>
+        </div>
+    </div>
+    
+    <a href="/" class="back-link">
+        <i class="fas fa-arrow-left me-2"></i>Back to Home
+    </a>
+    
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="icon-circle">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h2>Welcome Back</h2>
+                <p>Sign in to your MediCare account</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-floating">
+                    <input type="email" class="form-control" id="email" placeholder="Email" required>
+                    <label for="email"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                </div>
+                
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" placeholder="Password" required>
+                    <label for="password"><i class="fas fa-lock me-2"></i>Password</label>
+                </div>
+                
+                <button type="submit" class="btn btn-login" id="loginBtn">
+                    <span class="login-text">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In Securely
+                    </span>
+                    <span class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin me-2"></i>Signing In...
+                    </span>
+                </button>
+            </form>
+            
+            <div id="message"></div>
+            
+            <div class="demo-accounts">
+                <h6 class="text-center mb-3 fw-bold">
+                    <i class="fas fa-rocket me-2 text-success"></i>Quick Demo Access
+                </h6>
+                <div class="demo-account" onclick="fillCredentials('admin@hospital.com', 'Admin123!')">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-shield text-primary"></i>
+                        <div>
+                            <strong>System Administrator</strong><br>
+                            <small class="text-muted">Complete system management & analytics</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-account" onclick="fillCredentials('ahmed.rahman@hospital.com', 'Doctor123!')">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user-md text-success"></i>
+                        <div>
+                            <strong>Healthcare Provider</strong><br>
+                            <small class="text-muted">Manage appointments & patient care</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-account" onclick="fillCredentials('john.doe@email.com', 'Patient123!')">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-user text-info"></i>
+                        <div>
+                            <strong>Patient Portal</strong><br>
+                            <small class="text-muted">Book appointments & manage health</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="register-link">
+                <p class="mb-0">New to MediCare? <a href="/register">Create your account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check for demo user from homepage
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoUser = sessionStorage.getItem('demoUser');
+            if (demoUser) {
+                const credentials = JSON.parse(demoUser);
+                fillCredentials(credentials.email, credentials.password);
+                sessionStorage.removeItem('demoUser');
+            }
+        });
+        
+        function fillCredentials(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            
+            // Add visual feedback
+            const targetAccount = event.target.closest('.demo-account');
+            if (targetAccount) {
+                // Remove active class from all accounts
+                document.querySelectorAll('.demo-account').forEach(acc => {
+                    acc.style.background = 'rgba(255, 255, 255, 0.9)';
+                });
+                
+                // Add active state to clicked account
+                targetAccount.style.background = 'rgba(72, 187, 120, 0.1)';
+                
+                // Auto-focus email field
+                document.getElementById('email').focus();
+            }
+        }
+        
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginText = loginBtn.querySelector('.login-text');
+            const loadingSpinner = loginBtn.querySelector('.loading-spinner');
+            
+            // Show loading state
+            loginText.style.display = 'none';
+            loadingSpinner.style.display = 'inline';
+            loginBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            try {
+                // Use JSON format instead of form data for consistency
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Store authentication data
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_type', data.user_type);
+                    localStorage.setItem('user_name', data.full_name);
+                    localStorage.setItem('user_id', data.user_id);
+                    
+                    messageDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Welcome back, ${data.full_name}! Redirecting to your dashboard...
+                        </div>
+                    `;
+                    
+                    // Redirect based on user type with smooth transition
+                    setTimeout(() => {
+                        const dashboards = {
+                            'admin': '/admin-dashboard',
+                            'doctor': '/doctor-dashboard',
+                            'patient': '/patient-dashboard'
+                        };
+                        
+                        window.location.href = dashboards[data.user_type] || '/patient-dashboard';
+                    }, 1500);
+                    
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            ${data.detail || 'Invalid credentials. Please check your email and password.'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Connection failed. Please check your internet connection and try again.
+                    </div>
+                `;
+            } finally {
+                // Reset button state
+                loginText.style.display = 'inline';
+                loadingSpinner.style.display = 'none';
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Add enter key support for password field
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+        
+        // Add focus effects
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

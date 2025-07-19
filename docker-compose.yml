@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://appointment_user:appointment_pass@db:5432/appointment_db
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: appointment_db
+      POSTGRES_USER: appointment_user
+      POSTGRES_PASSWORD: appointment_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  celery-worker:
+    build: .
+    command: celery -A app.core.scheduler worker --loglevel=info
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://appointment_user:appointment_pass@db:5432/appointment_db
+      - REDIS_URL=redis://redis:6379
+    restart: unless-stopped
+
+  celery-beat:
+    build: .
+    command: celery -A app.core.scheduler beat --loglevel=info
+    depends_on:
+      - db
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://appointment_user:appointment_pass@db:5432/appointment_db
+      - REDIS_URL=redis://redis:6379
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

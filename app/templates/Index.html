@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Healthcare Appointment System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+        }
+        .feature-card {
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .api-endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-hospital-alt me-2"></i>
+                Healthcare System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api">API Docs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/docs" target="_blank">
+                            <i class="fas fa-external-link-alt me-1"></i>
+                            API Documentation
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 mb-4">
+                <i class="fas fa-stethoscope me-3"></i>
+                Appointment Booking System
+            </h1>
+            <p class="lead mb-4">
+                A comprehensive healthcare management system for patients, doctors, and administrators
+            </p>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card bg-white text-dark">
+                        <div class="card-body">
+                            <h5 class="card-title">System Status</h5>
+                            <div class="row text-center">
+                                <div class="col-md-4">
+                                    <i class="fas fa-check-circle text-success fs-2"></i>
+                                    <p class="mt-2">API Online</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fas fa-database text-info fs-2"></i>
+                                    <p class="mt-2">Database Connected</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <i class="fas fa-shield-alt text-warning fs-2"></i>
+                                    <p class="mt-2">Secure Authentication</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">System Features</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-md text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Doctor Management</h5>
+                            <p class="card-text">
+                                Complete doctor profile management with specializations, 
+                                schedules, and consultation fees.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-calendar-check text-success fs-1 mb-3"></i>
+                            <h5 class="card-title">Appointment Booking</h5>
+                            <p class="card-text">
+                                Easy appointment scheduling with time slot validation,
+                                conflict checking, and status management.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users text-info fs-1 mb-3"></i>
+                            <h5 class="card-title">User Management</h5>
+                            <p class="card-text">
+                                Role-based access control for patients, doctors, 
+                                and administrators with secure authentication.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-bell text-warning fs-1 mb-3"></i>
+                            <h5 class="card-title">Notifications</h5>
+                            <p class="card-text">
+                                Automated email notifications for appointment 
+                                confirmations, reminders, and updates.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-bar text-danger fs-1 mb-3"></i>
+                            <h5 class="card-title">Reports & Analytics</h5>
+                            <p class="card-text">
+                                Comprehensive reporting system with monthly reports,
+                                revenue tracking, and system statistics.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card feature-card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-search text-secondary fs-1 mb-3"></i>
+                            <h5 class="card-title">Advanced Search</h5>
+                            <p class="card-text">
+                                Powerful search and filtering capabilities for 
+                                doctors by location, specialization, and availability.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Section -->
+    <section id="api" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">API Endpoints</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4><i class="fas fa-lock text-primary me-2"></i>Authentication</h4>
+                    <div class="api-endpoint">
+                        <strong>POST</strong> /api/v1/auth/register<br>
+                        <small>Register new user (patient/doctor)</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>POST</strong> /api/v1/auth/login<br>
+                        <small>User login with JWT token</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/auth/profile<br>
+                        <small>Get current user profile</small>
+                    </div>
+
+                    <h4 class="mt-4"><i class="fas fa-user-md text-success me-2"></i>Doctors</h4>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/doctors/<br>
+                        <small>List all doctors with filters</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/doctors/search<br>
+                        <small>Search doctors by name/specialization</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/doctors/{id}<br>
+                        <small>Get doctor details by ID</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h4><i class="fas fa-calendar text-info me-2"></i>Appointments</h4>
+                    <div class="api-endpoint">
+                        <strong>POST</strong> /api/v1/appointments/<br>
+                        <small>Create new appointment</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/appointments/<br>
+                        <small>Get user's appointments</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>PUT</strong> /api/v1/appointments/{id}/status<br>
+                        <small>Update appointment status</small>
+                    </div>
+
+                    <h4 class="mt-4"><i class="fas fa-cog text-warning me-2"></i>Admin</h4>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/admin/dashboard<br>
+                        <small>Admin dashboard statistics</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/admin/reports/monthly<br>
+                        <small>Generate monthly reports</small>
+                    </div>
+                    <div class="api-endpoint">
+                        <strong>GET</strong> /api/v1/admin/users<br>
+                        <small>Manage all users</small>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/docs" class="btn btn-primary btn-lg" target="_blank">
+                    <i class="fas fa-book me-2"></i>
+                    Complete API Documentation
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Quick Start Guide</h2>
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Default Users (After Seeding)</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6 class="text-primary">Admin</h6>
+                                    <p>
+                                        <strong>Email:</strong> admin@hospital.com<br>
+                                        <strong>Password:</strong> Admin123!
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-success">Doctor</h6>
+                                    <p>
+                                        <strong>Email:</strong> ahmed.rahman@hospital.com<br>
+                                        <strong>Password:</strong> Doctor123!
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="text-info">Patient</h6>
+                                    <p>
+                                        <strong>Email:</strong> john.doe@email.com<br>
+                                        <strong>Password:</strong> Patient123!
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                            <h6>Setup Instructions:</h6>
+                            <ol>
+                                <li>Install dependencies: <code>pip install -r requirements.txt</code></li>
+                                <li>Set up environment variables: <code>cp .env.example .env</code></li>
+                                <li>Run database migrations: <code>python scripts/seed_data.py</code></li>
+                                <li>Start the server: <code>uvicorn app.main:app --reload</code></li>
+                                <li>Visit <code>http://localhost:8000</code> to access the API</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>&copy; 2025 Healthcare Appointment System. Built with FastAPI and Bootstrap.</p>
+            <p>
+                <a href="/docs" class="text-light me-3">API Docs</a>
+                <a href="/health" class="text-light">Health Check</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
